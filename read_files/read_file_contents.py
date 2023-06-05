@@ -10,13 +10,16 @@ class ReadContents:
         
     def read_txt(self) -> str:
         """Only reads documents with the file extension .txt"""
-
+        self.read_txt = {}
         for file_name, file_ext in self.present_files:
             if file_ext == ".txt":
                 self.full_path = pathlib.PurePath(self.src_path, file_name) # To avoid FileNotFoundError
                 with open(self.full_path, "r") as scanned_file: 
                     self.data = scanned_file.read()
-                    return self.data
+                    self.read_txt[file_name] = self.data
+
+        return self.read_txt
+        
 
     def read_docx(self) -> list:
         """Only reads documents with the file extension .docx"""

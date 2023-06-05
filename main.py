@@ -5,7 +5,6 @@ class ScanDocument:
     read_contents = ReadContents()
     src_dir = None # To avoid "AttributeError: type object 'ScanDocument' has no attribute 'src_dir"
     
-
     def __init__(self, src_dir) -> None:
         ScanDocument.src_dir = src_dir
 
@@ -26,7 +25,6 @@ class ScanDocument:
 
         # Gets only the files in the root directory.
         self.read_contents.present_files = [(file_path.name, file_path.suffix) for file_path in self.dir_path.iterdir() if file_path.is_file()]
-        
         print("Files in Root Directory:")
         
         self.ext = {}
@@ -39,15 +37,24 @@ class ScanDocument:
         print("\n")
         print(f"Extensions:\n{self.ext}")
 
-
     def choose_file_type(self) -> str:
         self.pick_type = input("Which file type(s) do you want to scan? ").strip().lower()
         if self.pick_type == ".txt": # Read .txt files
-            return self.read_contents.read_txt()
+            keys = self.read_contents.read_txt().keys()
+            print(list(keys)) # For a clear output
+            self.txt_data = self.read_contents.read_txt()
+            print(self.txt_data.items())
         elif self.pick_type == ".docx":
             return self.read_contents.read_docx()
         elif self.pick_type == ".pdf":
-            print(self.read_contents.read_pdf())
+            return self.read_contents.read_pdf()
+        
+    def search_characters(self, parser):
+        self.parser = parser
+        if self.pick_type == ".txt":
+            pass
+
+        
 
 
 def main():
@@ -56,8 +63,7 @@ def main():
     scan_document.read_contents.src_path = ScanDocument.get_docs()
     scan_document.get_files()
     scan_document.choose_file_type()
-
-
+    scan_document.search_characters(parser= input("Search for what: ").strip())
 
 if __name__ == "__main__":
     main()
