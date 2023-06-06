@@ -48,6 +48,7 @@ class ScanDocument:
             return self.read_contents.read_docx()
         elif self.pick_type == ".pdf":
             return self.read_contents.read_pdf()
+        #HELLO
         
     def search_characters(self, parser):
         self.parser = parser
