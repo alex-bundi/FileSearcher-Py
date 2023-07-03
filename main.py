@@ -9,10 +9,10 @@ class ScanDocument:
         ScanDocument.src_dir = src_dir
 
     @classmethod
-    def get_docs(cls) -> None:
+    def get_docs(cls):
         """Prompts user for source file path."""
         while True:
-            cls.dir_path = Path(cls.src_dir)
+            cls.dir_path = Path(cls.src_dir) # type: ignore
             if cls.dir_path.is_dir(): # If provided path exists in the OS.
                 break
             else:
@@ -37,23 +37,25 @@ class ScanDocument:
         print("\n")
         print(f"Extensions:\n{self.ext}")
 
-    def choose_file_type(self) -> str:
+    def choose_file_type(self):
         self.pick_type = input("Which file type(s) do you want to scan? ").strip().lower()
         if self.pick_type == ".txt": # Read .txt files
-            keys = self.read_contents.read_txt().keys()
-            print(list(keys)) # For a clear output
             self.txt_data = self.read_contents.read_txt()
-            print(self.txt_data.items())
+            for found_files in self.txt_data: # To display file names
+                print(list(found_files.keys()))
+            return self.txt_data
+
         elif self.pick_type == ".docx":
-            return self.read_contents.read_docx()
+            print(self.read_contents.read_docx())
         elif self.pick_type == ".pdf":
-            return self.read_contents.read_pdf()
-        #HELLO
+            for dt in self.read_contents.read_pdf(): # Get filenames
+                print(f"{dt['filename']}, ", end="")
+            self.read_contents.read_pdf()
         
     def search_characters(self, parser):
         self.parser = parser
         if self.pick_type == ".txt":
-            pass
+            pass # Solve this error TypeError: 'dict' object is not callable
 
         
 
@@ -61,10 +63,10 @@ class ScanDocument:
 def main():
     scan_document = ScanDocument(src_dir= input("Directory: ").strip())
     scan_document.get_docs()
-    scan_document.read_contents.src_path = ScanDocument.get_docs()
+    scan_document.read_contents.src_path = ScanDocument.get_docs() # type: ignore
     scan_document.get_files()
     scan_document.choose_file_type()
-    scan_document.search_characters(parser= input("Search for what: ").strip())
+    #scan_document.search_characters(parser= input("Search for what: ").strip())
 
 if __name__ == "__main__":
     main()
